@@ -1,0 +1,32 @@
+<launch>
+
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-01-23-57-33.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-01-23-31-10.bag"/> -->
+   <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/LCAS_20160523_1200_1218.bag"/> -->
+   <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-02-00-16-07.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/2022-02-02-15-57-22.bag"/> -->
+  <!-- <param name="use_sim_time" value="true"/>  -->
+  <!-- <node pkg="rosbag" type="play" name="rosbag_play" args="clock $(arg bag)" required="true"/> -->
+
+  <!-- <node pkg="velodyne_pointcloud" type="cloud_node" name="cloud_node"> -->
+  <!-- <include file ="$(find velodyne_driver)/launch/nodelet_manager.launch" /> -->
+   <!-- <node pkg="velodyne_pointcloud" type="transform_node" name="cloud_node">
+    <param name="model" value="VLP16"/>
+    <param name="calibration" value="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+    <param name="min_range" value="0.4"/>
+    <param name="max_range" value="130.0"/>
+  </node>
+   -->
+
+  <node pkg="pointcloud_preprocessing" type="raw_data" name="raw_data" output="screen" respawn="false">
+  </node>
+  <!-- <node pkg="pointcloud_preprocessing" type="ransac" name="ransac" output="screen" respawn="false">
+    <param name="distance_threshold" type="double" value="0.01"/>
+  </node> -->
+
+  <!-- <node pkg="pointcloud_preprocessing" type="old_ransac" name="old_ransac" output="screen" respawn="false">
+  </node> -->
+
+  <!-- <node pkg="rviz" type="rviz" name="rviz" /> -->
+</launch>
+<!-- args="-d $(find object3d_detector)/launch/object3d_detector.rviz" -->

@@ -1,0 +1,49 @@
+<launch>
+  <!-- rosbag play -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/LCAS_20160523_1200_1218.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-01-23-31-10.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-01-23-57-33.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-02-00-16-07.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/feb/2022-03-02-00-18-14.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/today_march/2022-03-12-04-42-36.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/today_march/2022-03-12-04-59-52.bag"/> -->
+  <!-- <arg name="bag" value="/home/quang_le/ros_bag_files/today_15_03/2022-03-15-02-46-37.bag"/> -->
+  <arg name="bag" value="/home/quang_le/ros_bag_files/today_15_03/2022-03-15-03-10-43.bag"/>
+
+  <param name="use_sim_time" value="true"/> 
+  <node pkg="rosbag" type="play" name="rosbag_play" args="--clock $(arg bag)" required="true"/>
+
+  <!-- <include file ="$(find velodyne_driver)/launch/nodelet_manager.launch" /> -->
+  <!-- <node pkg="velodyne_pointcloud" type="cloud_node" name="cloud_node"> -->
+   <node pkg="velodyne_pointcloud" type="transform_node" name="cloud_node">
+    <param name="model" value="VLP16"/>
+    <param name="calibration" value="$(find velodyne_pointcloud)/params/VLP16db.yaml"/>
+    <param name="min_range" value="0.4"/>
+    <param name="max_range" value="130.0"/>
+  </node>
+
+   <!-- <node pkg="tf" type="static_transform_publisher" name="velodyne" args="0 0 0 0 0 0 base_link velodyne 100"/> -->
+  
+  
+  <!-- 3D Object Detector -->
+  <node pkg="object3d_detector" type="object3d_detector" name="object3d_detector" output="screen" respawn="false">
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian.model"/> -->
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_12_3_4h42.model"/> -->
+    <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_12_3_4h42_ver_3.model"/>
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_12_3_4h42_ver_2.model"/> -->
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_12_3_4h59.model"/> -->
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_15_3_2h46.model"/> -->
+    <!-- <param name="model_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian_15_3_3h10.model"/> -->
+
+    <param name="range_file_name" type="string" value="$(find object3d_detector)/libsvm/pedestrian.range"/>
+  </node>
+  
+  <!-- NBellotto's Bayes People Tracker
+  <rosparam command="load" file="$(find object3d_detector)/config/object3d_detector.yaml"/>
+  <node pkg="bayes_people_tracker" type="bayes_people_tracker" name="bayes_people_tracker" output="screen" respawn="false">
+    <param name="target_frame" type="string" value="odom"/>
+  </node> -->
+  
+  <!-- ROS Visualization -->
+  <node pkg="rviz" type="rviz" name="rviz" args="-d $(find object3d_detector)/launch/object3d_detector.rviz"/>
+</launch>
